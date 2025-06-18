@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Account</title>
+</head>
+<body>
+
+    <div class = "container">
+
+
+        <h1>입장한 상태</h1>
+
+        <h3>
+            <a href="/create">가계부 달력 생성하기</a>
+        </h3>
+
+
+
+        <div class = "calendar-list-container">
+            <h2> 달력 목록 </h2>
+
+            <div class = "calendar-list" th:if="${calendarResponseDtoList.isEmpty()}">
+            가계부 달력이 존재하지 않습니다.
+            </div>
+
+            <div class = "calendar-list" th:if="${!calendarResponseDtoList.isEmpty()}">
+
+                <div th:each="calendarResponseDto : ${calendarResponseDtoList}" >
+                    <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}">
+                        <span th:text="${calendarResponseDto.date}"> 날짜 </span>
+                        <span th:text="${calendarResponseDto.title}"> 제목 </span>
+                    </a>
+
+                    <form th:action="@{|/calendar/delete/${calendarResponseDto.id}|}" method="post" style="display:inline;">
+                        <button type="submit">삭제</button>
+                    </form>
+
+                    <br>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>
