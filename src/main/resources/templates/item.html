@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Account</title>
+</head>
+
+<body>
+
+<div class = "container">
+
+    <a href="/home">홈</a>
+
+    <div class = "calendar">
+        <span th:text="${calendarResponseDto.date}"> 날짜 </span>
+        <span th:text="${calendarResponseDto.title}"> 달력 제목 </span>
+    </div>
+
+    <h3>
+        <a th:href="@{/calendar/{id}/item/create(id=${calendarResponseDto.id})}">세부 항목 생성하기</a>
+    </h3>
+
+
+
+    <div class = "calendarItem-list-container">
+
+        <div class = "calendarItem-list" th:if="${calendarItemResponseDtoList.isEmpty()}">
+            세부 항목이 존재하지 않습니다.
+        </div>
+
+        <div class = "calendarItem-list" th:if="${!calendarItemResponseDtoList.isEmpty()}">
+            <div th:each="calendarItem : ${calendarItemResponseDtoList}" >
+
+                <span th:text="${calendarItem.itemTitle}"> 항목명 </span>
+                <span th:text="${calendarItem.itemAmount}"> 금액 </span>
+
+                <form th:action="@{|/calendar/${calendarResponseDto.id}/item/${calendarItem.id}/update|}" method="get" style="display:inline;">
+                    <button type="submit">수정</button>
+                </form>
+
+                <form th:action="@{|/calendar/${calendarResponseDto.id}/item/${calendarItem.id}/delete|}" method="post" style="display:inline;">
+                    <button type="submit">삭제</button>
+                </form>
+
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+</body>
+</html>
