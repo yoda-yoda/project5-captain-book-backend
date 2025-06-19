@@ -3,9 +3,11 @@ package com.yoda.accountProject.calendar.service;
 import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
+import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,17 @@ public class CalendarServiceImpl {
         return calendarRepository.findById(calendarId)
                 .orElseThrow( () -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
     }
+
+
+    @Transactional
+    public void updateCalendar(Long calendarId, CalendarUpdateDto calendarUpdateDto) {
+
+        Calendar calendar = calendarRepository.findById(calendarId)
+                .orElseThrow(() -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
+
+        calendar.updateFromDto(calendarUpdateDto);
+    }
+
 
 
     public void deleteCalendar(Long calendarId) {

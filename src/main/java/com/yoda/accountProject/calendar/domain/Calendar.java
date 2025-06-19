@@ -1,5 +1,6 @@
 package com.yoda.accountProject.calendar.domain;
 
+import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -29,6 +30,12 @@ public class Calendar {
     public Calendar(String title, String date) {
         this.title = title;
         this.date = date;
+    }
+
+
+    public void updateFromDto(CalendarUpdateDto calendarUpdateDto){
+        this.title = calendarUpdateDto.getTitle();
+        this.date = calendarUpdateDto.getDate();
     }
 
 }
