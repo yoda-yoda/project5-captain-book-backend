@@ -41,3 +41,4 @@ out/
 
 ### h2 db ###
 *.mv.db
+accountTestDb.trace.db
