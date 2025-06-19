@@ -35,6 +35,10 @@
                         <span th:text="${calendarResponseDto.title}"> 제목 </span>
                     </a>
 
+                    <form th:action="@{|/calendar/update/${calendarResponseDto.id}|}" method="get" style="display:inline;">
+                        <button type="submit">수정</button>
+                    </form>
+
                     <form th:action="@{|/calendar/delete/${calendarResponseDto.id}|}" method="post" style="display:inline;">
                         <button type="submit">삭제</button>
                     </form>
