@@ -46,8 +46,8 @@ public class CalendarItemController {
                              @ModelAttribute CalendarItemRegisterDto calendarItemRequestDto
                              ){
 
-
-        calendarItemService.saveItem(calendarItemRequestDto, calendarId);
+        byte typeId = calendarItemRequestDto.getType().getTypeId();
+        calendarItemService.saveItem(calendarItemRequestDto, calendarId, typeId);
 
 
         return "redirect:/calendar/" + calendarId + "/item";
