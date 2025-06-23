@@ -18,7 +18,18 @@
 
     <div>
         <label for="item-amount">금액:</label>
-        <input type="number" id="item-amount" name="itemAmount" th:placeholder="${calendarItemDto.itemAmount}" required>
+        <input type="number" id="item-amount" name="itemAmount" th:placeholder="${calendarItemDto.itemAmount}" required min="0">
+
+        <label>
+            <input type="radio" name="type" value="EXPENSE" checked required >
+            지출
+        </label>
+        <label>
+            <input type="radio" name="type" value="INCOME">
+            수입
+        </label>
+
+
     </div>
 
 

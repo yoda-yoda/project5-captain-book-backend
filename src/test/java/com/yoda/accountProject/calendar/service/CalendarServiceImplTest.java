@@ -1,4 +1,4 @@
-package com.yoda.accountProject.service;
+package com.yoda.accountProject.calendar.service;
 
 
 import com.yoda.accountProject.calendar.domain.Calendar;
@@ -6,6 +6,8 @@ import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
 import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.system.exception.ExceptionMessage;
+import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,7 @@ class CalendarServiceImplTest {
         CalendarResponseDto resDto = calendarServiceImpl.saveCalendar(reqDto);
 
         Calendar entity = calendarRepository.findById(resDto.getId())
-                .orElseThrow(() -> new Exception());
+                .orElseThrow(() -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
 
         //then
         assertThat(entity.getId()).isEqualTo(resDto.getId());

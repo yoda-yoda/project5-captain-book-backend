@@ -5,20 +5,29 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class CalendarItemResponseDto {
 
     private Long id;
     private String itemTitle;
-    private String itemAmount;
+    private Long itemAmount;
+    private byte itemTypeNumber;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 
     @Builder
-    public CalendarItemResponseDto(Long id, String itemTitle, String itemAmount) {
+    public CalendarItemResponseDto(Long id, String itemTitle, Long itemAmount,
+                                   LocalDateTime createdAt,  LocalDateTime updatedAt, byte itemTypeNumber) {
         this.id = id;
         this.itemTitle = itemTitle;
         this.itemAmount = itemAmount;
+        this.itemTypeNumber = itemTypeNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
 
@@ -27,6 +36,9 @@ public class CalendarItemResponseDto {
                 .id(calendarItem.getId())
                 .itemTitle(calendarItem.getItemTitle())
                 .itemAmount(calendarItem.getItemAmount())
+                .itemTypeNumber( (byte) (long) calendarItem.getItemType().getId() )
+                .createdAt(calendarItem.getCreatedAt())
+                .updatedAt(calendarItem.getUpdatedAt())
                 .build();
     }
 
