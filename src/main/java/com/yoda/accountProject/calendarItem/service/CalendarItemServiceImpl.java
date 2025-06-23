@@ -7,6 +7,8 @@ import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
+import com.yoda.accountProject.itemType.domain.ItemType;
+import com.yoda.accountProject.itemType.service.ItemTypeServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,7 +25,7 @@ public class CalendarItemServiceImpl {
 
     private final CalendarItemRepository calendarItemRepository;
     private final CalendarServiceImpl calendarService;
-
+    private final ItemTypeServiceImpl itemTypeService;
 
     public List<CalendarItemResponseDto> getAllCalendarItem(Long calendarId) {
 
@@ -63,15 +65,15 @@ public class CalendarItemServiceImpl {
 
 
 
-    public CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId) {
+    public CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId, byte typeId) {
 
         Calendar calendarEntity = calendarService.getCalendarEntityById(calendarId);
+        ItemType itemTypeEntity = itemTypeService.getItemTypeEntityById( (long) typeId );
 
-        CalendarItem entity = CalendarItemRegisterDto.toEntity(calendarItemRequestDto, calendarEntity);
+        CalendarItem entity = CalendarItemRegisterDto.toEntity(calendarItemRequestDto, calendarEntity, itemTypeEntity);
         CalendarItem savedEntity = calendarItemRepository.save(entity);
 
         return CalendarItemResponseDto.fromEntity(savedEntity);
-
     }
 
 
@@ -81,7 +83,11 @@ public class CalendarItemServiceImpl {
         CalendarItem entity = calendarItemRepository.findById(calendarItemId)
                 .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
 
-        entity.updateFromDto(calendarItemUpdateDto);
+        byte typeId = calendarItemUpdateDto.getType().getTypeId();
+
+        ItemType updatedItemType = itemTypeService.getItemTypeEntityById((long) typeId);
+
+        entity.updateFromDto(calendarItemUpdateDto, updatedItemType);
     }
 
 
