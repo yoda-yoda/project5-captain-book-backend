@@ -1,11 +1,11 @@
 package com.yoda.accountProject.calendarItem.controller;
 
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
+import com.yoda.accountProject.calendar.service.CalendarService;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
-import com.yoda.accountProject.calendarItem.service.CalendarItemServiceImpl;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalendarItemController {
 
-    private final CalendarServiceImpl calendarService;
-    private final CalendarItemServiceImpl calendarItemService;
+    private final CalendarService calendarService;
+    private final CalendarItemService calendarItemService;
 
 
     @GetMapping("/calendar/{calendarId}/item")

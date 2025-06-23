@@ -1,19 +1,21 @@
-package com.yoda.accountProject.calendarItem.service;
+package com.yoda.accountProject.calendarItem.service.impl;
 
 import com.yoda.accountProject.calendar.domain.Calendar;
+import com.yoda.accountProject.calendar.service.CalendarService;
 import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
+import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import com.yoda.accountProject.itemType.domain.ItemType;
+import com.yoda.accountProject.itemType.service.ItemTypeService;
 import com.yoda.accountProject.itemType.service.ItemTypeServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CalendarItemServiceImpl {
+public class CalendarItemServiceImpl implements CalendarItemService {
 
     private final CalendarItemRepository calendarItemRepository;
-    private final CalendarServiceImpl calendarService;
-    private final ItemTypeServiceImpl itemTypeService;
+    private final CalendarService calendarService;
+    private final ItemTypeService itemTypeService;
 
     public List<CalendarItemResponseDto> getAllCalendarItem(Long calendarId) {
 
