@@ -1,7 +1,7 @@
 package com.yoda.accountProject.calendarItem.service;
 
 import com.yoda.accountProject.calendar.domain.Calendar;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
@@ -13,7 +13,6 @@ import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

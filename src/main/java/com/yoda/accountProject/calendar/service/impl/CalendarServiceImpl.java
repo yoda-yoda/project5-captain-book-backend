@@ -1,10 +1,11 @@
-package com.yoda.accountProject.calendar.service;
+package com.yoda.accountProject.calendar.service.impl;
 
 import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
+import com.yoda.accountProject.calendar.service.CalendarService;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import jakarta.transaction.Transactional;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CalendarServiceImpl {
+public class CalendarServiceImpl implements CalendarService {
 
     private final CalendarRepository calendarRepository;
 

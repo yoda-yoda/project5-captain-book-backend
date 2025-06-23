@@ -5,7 +5,7 @@ import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.service.CalendarItemServiceImpl;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

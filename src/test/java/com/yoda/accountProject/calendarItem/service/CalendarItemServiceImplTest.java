@@ -4,7 +4,7 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.domain.Type;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
