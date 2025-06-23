@@ -16,6 +16,13 @@ public class ExceptionMessage {
 
     }
 
+    //
+    public static class ItemType {
+
+        public static final String ITEM_TYPE_NOT_FOUND_ERROR = "해당 항목 종류가 존재하지 않습니다.";
+
+    }
+
 
 
 
