@@ -4,13 +4,15 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
-import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.CalendarService;
+import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.domain.Type;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
+import com.yoda.accountProject.calendarItem.service.impl.CalendarItemServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
@@ -28,11 +30,11 @@ class CalendarItemServiceImplTest {
     @Autowired
     private CalendarRepository calendarRepository;
     @Autowired
-    private CalendarServiceImpl calendarServiceImpl;
+    private CalendarService calendarService;
     @Autowired
     private CalendarItemRepository calendarItemRepository;
     @Autowired
-    private CalendarItemServiceImpl calendarItemServiceImpl;
+    private CalendarItemService calendarItemService;
 
     // 테스트용 객체
     private Calendar testCalendar;
@@ -52,7 +54,7 @@ class CalendarItemServiceImplTest {
                 .build();
 
         //when
-        CalendarResponseDto resDto = calendarServiceImpl.saveCalendar(reqDto);
+        CalendarResponseDto resDto = calendarService.saveCalendar(reqDto);
 
         Calendar entity = calendarRepository.findById(resDto.getId())
                 .orElseThrow( () -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
