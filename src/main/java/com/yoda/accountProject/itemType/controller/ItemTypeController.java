@@ -1,6 +1,6 @@
 package com.yoda.accountProject.itemType.controller;
 
-import com.yoda.accountProject.itemType.service.ItemTypeServiceImpl;
+import com.yoda.accountProject.itemType.service.ItemTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class ItemTypeController {
 
-
-    private final ItemTypeServiceImpl ItemTypeService;
-
+    private final ItemTypeService ItemTypeService;
 
 }
