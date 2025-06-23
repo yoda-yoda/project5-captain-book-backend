@@ -1,7 +1,8 @@
-package com.yoda.accountProject.itemType.service;
+package com.yoda.accountProject.itemType.service.impl;
 
 import com.yoda.accountProject.itemType.domain.ItemType;
 import com.yoda.accountProject.itemType.repository.ItemTypeRepository;
+import com.yoda.accountProject.itemType.service.ItemTypeService;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.itemType.ItemTypeNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ItemTypeServiceImpl {
+public class ItemTypeServiceImpl implements ItemTypeService {
 
     private final ItemTypeRepository itemTypeRepository;
 
