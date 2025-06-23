@@ -5,14 +5,12 @@ import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
 import com.yoda.accountProject.calendar.service.CalendarService;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.domain.Type;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
-import com.yoda.accountProject.calendarItem.service.impl.CalendarItemServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
@@ -83,7 +81,7 @@ class CalendarItemServiceImplTest {
         byte typeId = registerDto.getType().getTypeId();
 
         //when
-        CalendarItemResponseDto calendarItemResponseDto = calendarItemServiceImpl.saveItem(registerDto, testCalendar.getId(), typeId);
+        CalendarItemResponseDto calendarItemResponseDto = calendarItemService.saveItem(registerDto, testCalendar.getId(), typeId);
 
 
         CalendarItem calendarItemEntity = calendarItemRepository.findById(calendarItemResponseDto.getId())
@@ -120,7 +118,7 @@ class CalendarItemServiceImplTest {
                 .build();
 
         //when
-        calendarItemServiceImpl.updateItem(testCalendarItem.getId() ,updateItemDto);
+        calendarItemService.updateItem(testCalendarItem.getId() ,updateItemDto);
 
         CalendarItem updatedEntity = calendarItemRepository.findById(testCalendarItem.getId())
                 .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
