@@ -4,7 +4,7 @@ package com.yoda.accountProject.calendar.controller;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalendarController {
 
-
-    private final CalendarServiceImpl calendarService;
+    private final CalendarService calendarService;
 
 
     @GetMapping("/home")
