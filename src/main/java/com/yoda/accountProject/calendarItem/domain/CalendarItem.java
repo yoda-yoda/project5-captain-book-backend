@@ -27,7 +27,6 @@ public class CalendarItem {
     @JoinColumn(name = "item_type_id", nullable = false)
     private ItemType itemType;
 
-
     private String itemTitle;
     private Long itemAmount;
 
