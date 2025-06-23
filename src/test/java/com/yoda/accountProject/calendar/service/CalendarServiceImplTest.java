@@ -5,7 +5,7 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
-import com.yoda.accountProject.calendar.service.CalendarServiceImpl;
+import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,7 +24,7 @@ class CalendarServiceImplTest {
     @Autowired
     private CalendarRepository calendarRepository;
     @Autowired
-    private CalendarServiceImpl calendarServiceImpl;
+    private CalendarService calendarService;
 
 
 
@@ -43,7 +41,7 @@ class CalendarServiceImplTest {
 
         //when
 
-        CalendarResponseDto resDto = calendarServiceImpl.saveCalendar(reqDto);
+        CalendarResponseDto resDto = calendarService.saveCalendar(reqDto);
 
         Calendar entity = calendarRepository.findById(resDto.getId())
                 .orElseThrow(() -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
