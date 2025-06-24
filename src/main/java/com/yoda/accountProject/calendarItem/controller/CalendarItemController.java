@@ -3,6 +3,7 @@ package com.yoda.accountProject.calendarItem.controller;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
+import com.yoda.accountProject.calendarItem.dto.CalendarItemTotalAmountDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import com.yoda.accountProject.calendar.service.CalendarService;
@@ -30,12 +31,14 @@ public class CalendarItemController {
 
         List<CalendarItemResponseDto> calendarItemResponseDtoList = calendarItemService.getAllCalendarItem(calendarId);
 
+        CalendarItemTotalAmountDto totalAmountDto = calendarItemService.getTotalAmount(calendarItemResponseDtoList);
+
         CalendarResponseDto calendarResponseDto = calendarService.getCalendarDtoById(calendarId);
 
 
         model.addAttribute("calendarResponseDto", calendarResponseDto);
-
         model.addAttribute("calendarItemResponseDtoList", calendarItemResponseDtoList);
+        model.addAttribute("totalAmountDto", totalAmountDto);
 
         return "item";
     }

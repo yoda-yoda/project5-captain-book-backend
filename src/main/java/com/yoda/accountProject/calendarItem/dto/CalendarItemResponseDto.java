@@ -14,18 +14,18 @@ public class CalendarItemResponseDto {
     private Long id;
     private String itemTitle;
     private Long itemAmount;
-    private byte itemTypeNumber;
+    private String itemType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 
     @Builder
     public CalendarItemResponseDto(Long id, String itemTitle, Long itemAmount,
-                                   LocalDateTime createdAt,  LocalDateTime updatedAt, byte itemTypeNumber) {
+                                   LocalDateTime createdAt,  LocalDateTime updatedAt, String itemType) {
         this.id = id;
         this.itemTitle = itemTitle;
         this.itemAmount = itemAmount;
-        this.itemTypeNumber = itemTypeNumber;
+        this.itemType = itemType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -36,7 +36,7 @@ public class CalendarItemResponseDto {
                 .id(calendarItem.getId())
                 .itemTitle(calendarItem.getItemTitle())
                 .itemAmount(calendarItem.getItemAmount())
-                .itemTypeNumber( (byte) (long) calendarItem.getItemType().getId() )
+                .itemType( calendarItem.getItemType().getType())
                 .createdAt(calendarItem.getCreatedAt())
                 .updatedAt(calendarItem.getUpdatedAt())
                 .build();
