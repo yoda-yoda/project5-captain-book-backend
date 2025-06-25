@@ -5,6 +5,7 @@ import com.yoda.accountProject.calendar.service.CalendarService;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
+import com.yoda.accountProject.calendarItem.dto.CalendarItemTotalAmountDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
 import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
 import com.yoda.accountProject.calendarItem.service.CalendarItemService;
@@ -28,6 +29,7 @@ public class CalendarItemServiceImpl implements CalendarItemService {
     private final CalendarService calendarService;
     private final ItemTypeService itemTypeService;
 
+
     public List<CalendarItemResponseDto> getAllCalendarItem(Long calendarId) {
 
         Calendar calendarEntityById = calendarService.getCalendarEntityById(calendarId);
@@ -36,12 +38,12 @@ public class CalendarItemServiceImpl implements CalendarItemService {
 
         List<CalendarItemResponseDto> calendarItemResponseDtoList = new ArrayList<>();
 
-
         if ( !calendarItemList.isEmpty() ) {
             for (CalendarItem calendarItem : calendarItemList) {
                 calendarItemResponseDtoList.add(CalendarItemResponseDto.fromEntity(calendarItem));
 
             }
+
         }
 
 
@@ -62,7 +64,6 @@ public class CalendarItemServiceImpl implements CalendarItemService {
         return calendarItemResponseDto;
 
     }
-
 
 
 
@@ -96,6 +97,40 @@ public class CalendarItemServiceImpl implements CalendarItemService {
 
         calendarItemRepository.deleteById(calendarItemId);
 
+    }
+
+
+    public CalendarItemTotalAmountDto getTotalAmount(List<CalendarItemResponseDto> calendarItemResponseDtoList) {
+
+        Long totalMinus = 0L;
+        Long totalPlus = 0L;
+
+        CalendarItemTotalAmountDto calendarItemTotalAmountDto = new CalendarItemTotalAmountDto();
+
+        if( calendarItemResponseDtoList.isEmpty() ){
+            return calendarItemTotalAmountDto;
+        }
+
+        for (CalendarItemResponseDto calendarItemResponseDto : calendarItemResponseDtoList) {
+
+
+            // 지출개념인지 수입개념인지 알아내기 위해 ITEM_TYPE 테이블에서 정보를 조회. 현재 명세상 id 1번이 지출(-), 2번이 수입(+) 개념이다.
+            if( calendarItemResponseDto.getItemType()
+                    .equals(itemTypeService.getItemTypeEntityById(1L).getType()) ) {
+                totalMinus += calendarItemResponseDto.getItemAmount() ;
+
+            } else if ( calendarItemResponseDto.getItemType()
+                    .equals(itemTypeService.getItemTypeEntityById(2L).getType())  ) {
+                totalPlus += calendarItemResponseDto.getItemAmount() ;
+            }
+
+        }
+
+        calendarItemTotalAmountDto.setTotalMinus(totalMinus);
+        calendarItemTotalAmountDto.setTotalPlus(totalPlus);
+        calendarItemTotalAmountDto.sum();
+
+        return calendarItemTotalAmountDto;
     }
 
 
