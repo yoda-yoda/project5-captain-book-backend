@@ -11,6 +11,10 @@
 
 }
 
+.calendar-link {
+    color: navy;
+}
+
 .calendar-list-container {
     margin-top: 50px;
 }
@@ -20,7 +24,7 @@
     /* display: inline-block; */
    /* background: #ccc;*/
 
-   color: inherit;
+   color: navy;
    text-decoration: none;
    font-size: 15px;
 }

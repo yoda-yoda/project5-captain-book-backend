@@ -4,6 +4,9 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
+import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
+import com.yoda.accountProject.calendarItem.dto.CalendarItemTotalAmountDto;
+
 import java.util.List;
 
 public interface CalendarService {

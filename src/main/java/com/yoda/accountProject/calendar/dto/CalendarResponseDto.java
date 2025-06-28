@@ -12,6 +12,7 @@ public class CalendarResponseDto {
     private Long id;
     private String date;
     private String title;
+    private Long totalAmount = 0L;
 
     public static CalendarResponseDto fromEntity(Calendar calendar){
         return CalendarResponseDto.builder()

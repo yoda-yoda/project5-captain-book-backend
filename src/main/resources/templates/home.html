@@ -11,45 +11,72 @@
 
     <div class = "container">
 
-
         <h1>입장한 상태</h1>
 
         <h3>
-            <a href="/create">가계부 달력 생성하기</a>
+            <a href="/create" > 가계부 달력 생성하기 </a>
         </h3>
-
-
 
         <div class = "calendar-list-container">
             <h2> 달력 목록 </h2>
 
-            <div class = "calendar-list" th:if="${calendarResponseDtoList.isEmpty()}">
+            <div th:if="${calendarResponseDtoList.isEmpty()}">
             가계부 달력이 존재하지 않습니다.
             </div>
 
-            <div class = "calendar-list" th:if="${!calendarResponseDtoList.isEmpty()}">
+            <div th:if="${!calendarResponseDtoList.isEmpty()}">
+                <table >
 
-                <div th:each="calendarResponseDto : ${calendarResponseDtoList}" >
-                    <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}">
-                        <span th:text="${calendarResponseDto.date}"> 날짜 </span>
-                        <span th:text="${calendarResponseDto.title}"> 제목 </span>
-                    </a>
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>제목</th>
+                        <th>합계</th>
+                    </tr>
+                    </thead>
 
-                    <form th:action="@{|/calendar/update/${calendarResponseDto.id}|}" method="get" style="display:inline;">
-                        <button type="submit">수정</button>
-                    </form>
+                    <tbody class = "calendar-list" >
+                    <tr th:each="calendarResponseDto : ${calendarResponseDtoList}">
 
-                    <form th:action="@{|/calendar/delete/${calendarResponseDto.id}|}" method="post" style="display:inline;">
-                        <button type="submit">삭제</button>
-                    </form>
+                        <td>
+                            <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}" th:text="${calendarResponseDto.date}">
+                            </a>
+                        </td>
 
-                    <br>
-                </div>
+                        <td>
+                            <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}" th:text="${calendarResponseDto.title}">
+                            </a>
+                        </td>
+
+                        <td>
+                            <span th:if="${calendarResponseDto.totalAmount > 0}"
+                                  th:text=" '+' + ${calendarResponseDto.totalAmount} + '원' "> 합계 </span>
+
+                            <span th:if="${calendarResponseDto.totalAmount <= 0}"
+                                  th:text="${calendarResponseDto.totalAmount} + '원' "> 합계 </span>
+
+                        </td>
+
+
+                        <td>
+                            <form th:action="@{|/calendar/update/${calendarResponseDto.id}|}" method="get" style="display:inline;">
+                                <button type="submit">수정</button>
+                            </form>
+                        </td>
+
+                        <td>
+                            <form th:action="@{|/calendar/delete/${calendarResponseDto.id}|}" method="post" style="display:inline;">
+                                <button type="submit">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
 
             </div>
 
         </div>
-
 
 
     </div>
