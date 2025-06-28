@@ -11,8 +11,9 @@ public class CalendarItemTotalAmountDto {
     private Long totalMinus = 0L;
     private Long totalAmount = 0L;
 
-    public void sum(){
+    public void calculateTotal(){
         this.totalAmount = this.totalPlus - this.totalMinus;
     }
+
 
 }
