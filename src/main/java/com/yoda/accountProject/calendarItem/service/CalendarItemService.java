@@ -1,5 +1,6 @@
 package com.yoda.accountProject.calendarItem.service;
 
+import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
 import com.yoda.accountProject.calendarItem.dto.CalendarItemTotalAmountDto;
@@ -18,7 +19,8 @@ public interface CalendarItemService {
     void updateItem(Long calendarItemId , CalendarItemUpdateDto calendarItemUpdateDto);
 
     void deleteCalendarItem(Long calendarItemId);
-    CalendarItemTotalAmountDto getTotalAmount(List<CalendarItemResponseDto> calendarItemResponseDtoList);
 
+    CalendarItemTotalAmountDto getTotalAmount(List<CalendarItemResponseDto> calendarItemResponseDtoListInCalendar);
 
+    CalendarItemTotalAmountDto getTotalAmountByItemEntities(List<CalendarItem> calendarItemList);
 }

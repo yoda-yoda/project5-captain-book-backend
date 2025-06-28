@@ -35,7 +35,6 @@ public class CalendarItemController {
 
         CalendarResponseDto calendarResponseDto = calendarService.getCalendarDtoById(calendarId);
 
-
         model.addAttribute("calendarResponseDto", calendarResponseDto);
         model.addAttribute("calendarItemResponseDtoList", calendarItemResponseDtoList);
         model.addAttribute("totalAmountDto", totalAmountDto);
