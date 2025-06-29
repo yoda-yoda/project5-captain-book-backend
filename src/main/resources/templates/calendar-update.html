@@ -4,28 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/calendar-update.css" />
     <title>Account</title>
 </head>
 <body>
+<div class = "calendar-update-container">
+    <h1> 달력 수정 페이지 </h1>
+    <form th:action="@{|/calendar/update/${calendar.id}|}" method="post">
 
-<h1> 달력 수정 페이지 </h1>
-<form th:action="@{|/calendar/update/${calendar.id}|}" method="post">
+        <div>
+            <label for="calendar-date">날짜:</label>
+            <input type="date" id="calendar-date" name="date" th:placeholder="${calendar.date}" required>
+        </div>
 
-    <div>
-        <label for="calendar-date">날짜:</label>
-        <input type="date" id="calendar-date" name="date" th:placeholder="${calendar.date}" required>
-    </div>
-
-    <div>
-        <label for="calendar-title">제목:</label>
-        <input type="text" id="calendar-title" name="title" th:placeholder="${calendar.title}" required>
-    </div>
+        <div>
+            <label for="calendar-title">제목:</label>
+            <input type="text" id="calendar-title" name="title" th:placeholder="${calendar.title}" required>
+        </div>
 
 
-    <div>
-        <button type="submit">저장</button>
-    </div>
-</form>
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>

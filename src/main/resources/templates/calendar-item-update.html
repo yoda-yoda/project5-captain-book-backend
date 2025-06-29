@@ -4,22 +4,23 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/calendar-item-update.css" />
     <title>Account</title>
 </head>
 <body>
+<div class="calendar-item-update-container">
 
-<h1> 세부 항목 생성 페이지</h1>
-
-<form th:action="@{|/calendar/${calendarId}/item|}" method="post">
+<h1> 세부 항목 수정 페이지 </h1>
+<form th:action="@{|/calendar/${calendarId}/item/${calendarItemDto.id}/update|}" method="post">
 
     <div>
         <label for="item-title">항목명:</label>
-        <input type="text" id="item-title" name="itemTitle" placeholder="항목명을 입력하세요" required>
+        <input type="text" id="item-title" name="itemTitle" th:placeholder="${calendarItemDto.itemTitle}" required>
     </div>
 
     <div>
         <label for="item-amount">금액:</label>
-        <input type="number" id="item-amount" name="itemAmount" placeholder="금액을 입력하세요" required min="0">
+        <input type="number" id="item-amount" name="itemAmount" th:placeholder="${calendarItemDto.itemAmount}" required min="0">
 
         <label>
             <input type="radio" name="type" value="EXPENSE" checked required >
@@ -30,6 +31,7 @@
             수입
         </label>
 
+
     </div>
 
 
@@ -37,7 +39,7 @@
         <button type="submit">저장</button>
     </div>
 </form>
-
+</div>
 </body>
 </html>
 

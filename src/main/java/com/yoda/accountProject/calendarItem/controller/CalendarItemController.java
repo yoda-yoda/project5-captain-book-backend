@@ -39,7 +39,7 @@ public class CalendarItemController {
         model.addAttribute("calendarItemResponseDtoList", calendarItemResponseDtoList);
         model.addAttribute("totalAmountDto", totalAmountDto);
 
-        return "item";
+        return "calendar-item";
     }
 
 
@@ -66,7 +66,7 @@ public class CalendarItemController {
         model.addAttribute("calendarId", calendarId);
 
 
-        return "item-update";
+        return "calendar-item-update";
     }
 
 
@@ -95,7 +95,7 @@ public class CalendarItemController {
 
         model.addAttribute("calendarId", calendarId);
 
-        return "item-create";
+        return "calendar-item-create";
     }
 
 

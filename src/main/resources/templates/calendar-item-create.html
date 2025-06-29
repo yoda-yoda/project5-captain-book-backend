@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/calendar-item-create.css" />
+    <title>Account</title>
+</head>
+<body>
+<div class="calendar-item-create-container">
+
+    <form th:action="@{|/calendar/${calendarId}/item|}" method="post">
+
+        <div>
+            <label for="item-title">항목명:</label>
+            <input type="text" id="item-title" name="itemTitle" placeholder="항목명을 입력하세요" required>
+        </div>
+
+        <div>
+            <label for="item-amount">금액:</label>
+            <input type="number" id="item-amount" name="itemAmount" placeholder="금액을 입력하세요" required min="0">
+
+            <label>
+                <input type="radio" name="type" value="EXPENSE" checked required >
+                지출
+            </label>
+            <label>
+                <input type="radio" name="type" value="INCOME">
+                수입
+            </label>
+
+        </div>
+
+
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
+</div>
+</body>
+<h1> 세부 항목 생성 페이지</h1>
+</html>
+
