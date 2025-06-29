@@ -5,7 +5,6 @@ import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendar.service.CalendarService;
-import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +25,7 @@ public class CalendarController {
 
         model.addAttribute("calendarResponseDtoList", calendarResponseDtoList);
 
-        return "home";
+        return "calendar-home";
     }
 
 
@@ -67,7 +66,7 @@ public class CalendarController {
 
     @GetMapping("/create")
     public String create(){
-        return "create";
+        return "calendar-create";
     }
 
 
