@@ -4,21 +4,56 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" >
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+
     <link rel="stylesheet" href="/css/calendar-home.css" />
+
     <title>Account</title>
 </head>
 <body>
 
+
+
     <div class = "calendar-home-container">
 
-        <h1>입장한 상태</h1>
 
-        <h3>
-            <a href="/create" > 가계부 달력 생성하기 </a>
-        </h3>
+
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary w-100">
+            <div class="container-fluid px-0 nav-container">
+                <a class="navbar-brand" href="/home">가계부</a>
+            </div>
+        </nav>
+
+
+
+        <div class = "calendar-create-btn-container">
+            <a href="/create" class = "calendar-create-btn" > 새 달력 추가 </a>
+        </div>
+
+
+        <div class = "calendar-total-sum-container">
+            <span> 총합 </span>
+
+            <div class = "calendar-total-sum">
+                  <span th:if="${calendarTotalSum > 0}"
+                        th:text=" '+' + ${calendarTotalSum} + '원' "> </span>
+
+                  <span th:if="${calendarTotalSum <= 0}"
+                        th:text="${calendarTotalSum} + '원' "> </span>
+
+            </div>
+
+
+        </div>
+
 
         <div class = "calendar-list-container">
-            <h2> 달력 목록 </h2>
+            <span th:if="${!calendarResponseDtoList.isEmpty()}"> 달력 목록 </span>
 
             <div th:if="${calendarResponseDtoList.isEmpty()}">
             가계부 달력이 존재하지 않습니다.
@@ -27,28 +62,33 @@
             <div th:if="${!calendarResponseDtoList.isEmpty()}">
                 <table >
 
-                    <thead>
+                    <thead class = "calendar-list-thead" >
                     <tr>
                         <th>날짜</th>
                         <th>제목</th>
                         <th>합계</th>
+                        <th>수정</th>
                     </tr>
                     </thead>
 
-                    <tbody class = "calendar-list" >
-                    <tr th:each="calendarResponseDto : ${calendarResponseDtoList}">
+                    <tbody class = "calendar-list-tbody" >
 
-                        <td>
+
+                    <tr class = "calendar-enter"
+
+                        th:each="calendarResponseDto : ${calendarResponseDtoList}">
+
+                        <td th:onclick="|location.href='@{/calendar/{id}/item(id=${calendarResponseDto.id})}'|">
                             <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}" th:text="${calendarResponseDto.date}">
                             </a>
                         </td>
 
-                        <td>
+                        <td th:onclick="|location.href='@{/calendar/{id}/item(id=${calendarResponseDto.id})}'|">
                             <a th:href="@{/calendar/{id}/item(id=${calendarResponseDto.id})}" th:text="${calendarResponseDto.title}">
                             </a>
                         </td>
 
-                        <td>
+                        <td th:onclick="|location.href='@{/calendar/{id}/item(id=${calendarResponseDto.id})}'|">
                             <span th:if="${calendarResponseDto.totalAmount > 0}"
                                   th:text=" '+' + ${calendarResponseDto.totalAmount} + '원' "> 합계 </span>
 
@@ -58,17 +98,28 @@
                         </td>
 
 
-                        <td>
-                            <form th:action="@{|/calendar/update/${calendarResponseDto.id}|}" method="get" style="display:inline;">
-                                <button type="submit">수정</button>
-                            </form>
+                        <td class = "edit-and-delete-btn-td">
+
+                            <button type="button" class="btn btn-link p-0 edit-btn"
+                                    title="날짜, 제목 수정"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                    th:attr="data-calendar-id=${calendarResponseDto.id}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+
+                            <button type="button" class="btn btn-link p-0 delete-btn"
+                                    title="달력 삭제"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    th:attr="data-calendar-id=${calendarResponseDto.id}">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+
                         </td>
 
-                        <td>
-                            <form th:action="@{|/calendar/delete/${calendarResponseDto.id}|}" method="post" style="display:inline;">
-                                <button type="submit">삭제</button>
-                            </form>
-                        </td>
+
                     </tr>
                     </tbody>
 
@@ -81,5 +132,63 @@
 
     </div>
 
+
+    <!-- editModal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">달력 수정</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    달력 날짜 및 제목을 수정하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+
+                    <form action="" method="get" style="display:inline;">
+                        <button type="submit" class="btn btn-primary confirm-btn" >확인</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- deleteModal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">달력 삭제</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    해당 달력을 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+
+                    <form action="" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-primary" >확인</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap Bundle JS (Popper 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- axios Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- calendar-home JS -->
+    <script src="../js/calendar-home.js"></script>
+
 </body>
 </html>
+

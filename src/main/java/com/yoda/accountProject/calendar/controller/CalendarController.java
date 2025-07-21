@@ -23,7 +23,10 @@ public class CalendarController {
 
         List<CalendarResponseDto> calendarResponseDtoList = calendarService.getAllCalendar();
 
+        Long calendarTotalSum = calendarService.getTotalCalendarAmountSum(calendarResponseDtoList);
+
         model.addAttribute("calendarResponseDtoList", calendarResponseDtoList);
+        model.addAttribute("calendarTotalSum", calendarTotalSum);
 
         return "calendar-home";
     }
