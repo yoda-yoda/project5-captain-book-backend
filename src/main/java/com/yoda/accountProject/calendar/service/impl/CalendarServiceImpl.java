@@ -75,6 +75,22 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
 
+    public Long getTotalCalendarAmountSum(List<CalendarResponseDto> allCalendarDtoList) {
+
+        Long sum = 0L;
+
+        if( allCalendarDtoList.isEmpty() ){
+            return sum;
+        }
+
+        for (CalendarResponseDto calendarResponseDto : allCalendarDtoList) {
+            sum += calendarResponseDto.getTotalAmount();
+        }
+
+        return sum;
+    }
+
+
 
     public CalendarResponseDto getCalendarDtoById(Long calendarId) {
 

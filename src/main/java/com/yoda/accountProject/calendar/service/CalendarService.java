@@ -14,6 +14,7 @@ public interface CalendarService {
 
     CalendarResponseDto saveCalendar(CalendarRequestDto calendarRequestDto);
     List<CalendarResponseDto> getAllCalendar();
+    Long getTotalCalendarAmountSum(List<CalendarResponseDto> allCalendarDtoList);
     CalendarResponseDto getCalendarDtoById(Long calendarId);
     Calendar getCalendarEntityById(Long calendarId);
     void updateCalendar(Long calendarId, CalendarUpdateDto calendarUpdateDto);
