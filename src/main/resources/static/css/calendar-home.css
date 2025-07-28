@@ -1,3 +1,33 @@
+
+* {
+    box-sizing: border-box;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #000;
+}
+
+
+/*.navbar-brand {
+    transition: background-color 0.2s ease;
+}
+
+.navbar-brand:hover {
+    background-color: #8f8786;
+}*/
+
+
+.navbar .nav-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .calendar-home-container {
 
     display: flex;
@@ -10,60 +40,92 @@
 
     width: 100%;
     height: 100%;
+
     /*border: 1px solid #ccc;*/
 }
 
 
-
-
-/*
-
-.calendar-link {
-    color: navy;
-}
-
 .calendar-list-container {
+    margin-top: 30px;
+}
+
+
+.calendar-create-btn-container {
+    margin-top: 100px;
+    margin-bottom: 40px;
+}
+
+.calendar-create-btn {
+  padding: 18px;
+  border: 2px solid #170808;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+}
+
+.calendar-create-btn:hover {
+
+  color: white;
+  background-color: #000;
+
+}
+
+
+.calendar-total-sum-container {
     margin-top: 50px;
+    text-align: center;
+    font-weight: 600 ;
 }
 
 
-.calendar-list , .calendar-list a{
-    */
-/* display: inline-block; *//*
-
-   */
-/* background: #ccc;*//*
-
-
-   color: navy;
-   text-decoration: none;
-   font-size: 15px;
+.calendar-total-sum {
+  font-size: 30px;
+  font-weight: 600;
 }
 
 
-.calendar-list a:hover {
-    color: blue;            */
-/* 마우스 올렸을 때 색상 *//*
-
-    */
-/*text-decoration: underline; *//*
-*/
-/* 마우스 올렸을 때만 밑줄 *//*
-
-}
-
-.calendar {
-    font-size: 40px;
-    font: bold;
-}
-
-.calendarItem-list-container {
-    margin-top: 20px;
-}
-
-.totalAmount-container {
-    margin-bottom: 50px;
+table .calendar-list-thead th {
+  text-align: left;
+  background-color: black;
+  padding-right: 160px;
+  color: white;
+  font-weight: 400;
 }
 
 
-*/
+
+
+
+.calendar-enter:hover {
+
+    transition: background-color 0.2s ease;
+    background: #c5c9d1;
+}
+
+
+/* 수정 및 삭제하는 td를 제외한 td에만 pointer 적용 */
+.calendar-enter td:not(.edit-and-delete-btn-td):hover {
+  cursor: pointer;
+}
+
+
+
+.edit-btn {
+    color: gray;
+}
+
+
+.edit-btn:hover {
+    color: black;
+}
+
+.delete-btn {
+    color: gray;
+}
+
+.delete-btn:hover {
+    color: black;
+}
+
+
