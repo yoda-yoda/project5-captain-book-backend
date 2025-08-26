@@ -47,7 +47,7 @@ public class CalendarController {
 
 
 
-    @PostMapping("/calendar/update/{calendarId}")
+    @PutMapping("/calendar/update/{calendarId}")
     public String calendarUpdate(
             @PathVariable Long calendarId,
             @RequestBody CalendarUpdateDto calendarUpdateDto){
@@ -65,7 +65,7 @@ public class CalendarController {
 //    }
 
 
-    @PostMapping("/calendar/delete/{calendarResponseDtoId}")
+    @DeleteMapping("/calendar/delete/{calendarResponseDtoId}")
     public String calendarDelete(@PathVariable Long calendarResponseDtoId){
 
         calendarService.deleteCalendar(calendarResponseDtoId);
