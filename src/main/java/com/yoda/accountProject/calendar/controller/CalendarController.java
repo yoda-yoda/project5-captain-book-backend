@@ -5,7 +5,10 @@ import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendar.service.CalendarService;
+import com.yoda.accountProject.system.common.response.ResponseData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -17,60 +20,74 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping("/home")
-    public CalendarFinalResponseDto allCalendarRead() {
+    public ResponseEntity<ResponseData<CalendarFinalResponseDto>>  allCalendarRead() {
+
 
         List<CalendarResponseDto> calendarResponseDtoList = calendarService.getAllCalendar();
         Long calendarTotalSum = calendarService.getTotalCalendarAmountSum(calendarResponseDtoList);
 
-        return new CalendarFinalResponseDto(calendarResponseDtoList, calendarTotalSum);
+        CalendarFinalResponseDto res = new CalendarFinalResponseDto(calendarResponseDtoList, calendarTotalSum);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<CalendarFinalResponseDto>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .data(res)
+                        .build()
+                );
     }
 
 
     @PostMapping("/home")
-    public CalendarResponseDto calendarCreate(@RequestBody CalendarRequestDto calendarRequestDto){
+    public ResponseEntity<ResponseData<CalendarResponseDto>> calendarCreate(@RequestBody CalendarRequestDto calendarRequestDto){
 
-        return calendarService.saveCalendar(calendarRequestDto);
+        CalendarResponseDto res = calendarService.saveCalendar(calendarRequestDto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        ResponseData.<CalendarResponseDto>builder()
+                                .statusCode(HttpStatus.CREATED.value())
+                                .data(res)
+                                .build()
+                );
     }
 
 
 
 
-//    @GetMapping("/calendar/update/{calendarId}")
-//    public String calendarUpdate(@PathVariable Long calendarId, Model model){
-//
-//        CalendarResponseDto dto = calendarService.getCalendarDtoById(calendarId);
-//
-//        model.addAttribute("calendar", dto);
-//
-//        return "calendar-update";
-//    }
-
-
 
     @PutMapping("/calendar/update/{calendarId}")
-    public String calendarUpdate(
+    public ResponseEntity<ResponseData<Void>> calendarUpdate(
             @PathVariable Long calendarId,
             @RequestBody CalendarUpdateDto calendarUpdateDto){
 
         calendarService.updateCalendar(calendarId, calendarUpdateDto);
 
-        return "";
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<Void>builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .build()
+                );
     }
 
 
 
-//    @GetMapping("/create")
-//    public String create(){
-//        return "calendar-create";
-//    }
-
-
     @DeleteMapping("/calendar/delete/{calendarResponseDtoId}")
-    public String calendarDelete(@PathVariable Long calendarResponseDtoId){
+    public ResponseEntity<ResponseData<Void>> calendarDelete(@PathVariable Long calendarResponseDtoId){
 
         calendarService.deleteCalendar(calendarResponseDtoId);
 
-        return "";
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(
+                        ResponseData.<Void>builder()
+                                .statusCode(HttpStatus.NO_CONTENT.value())
+                                .build()
+                );
     }
 
 
