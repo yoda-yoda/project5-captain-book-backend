@@ -19,6 +19,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -47,7 +49,7 @@ class CalendarItemServiceImplTest {
 
         // given
         CalendarRequestDto reqDto = CalendarRequestDto.builder()
-                .date("2025-01-01")
+                .date(LocalDate.of(2025,01,01))
                 .title("테스트1")
                 .build();
 

@@ -1,5 +1,9 @@
 package com.yoda.accountProject.system.exception.itemType;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class ItemTypeNotFoundException extends RuntimeException {
 
     public ItemTypeNotFoundException(String message) {

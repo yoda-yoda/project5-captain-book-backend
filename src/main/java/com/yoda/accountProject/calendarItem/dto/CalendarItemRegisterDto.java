@@ -4,6 +4,9 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.domain.Type;
 import com.yoda.accountProject.itemType.domain.ItemType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +17,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CalendarItemRegisterDto {
 
+    @NotNull
+    @Size(max = 45, message = "항목명은 45자 이하여야 합니다.")
     private String itemTitle;
+
+    @NotNull
+    @Max(value = 999_999_999_999L, message = "허용 가능 금액을 초과하였습니다.")
     private Long itemAmount;
+
+    @NotNull
     private Type type;
 
     @Builder

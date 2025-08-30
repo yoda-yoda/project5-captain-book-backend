@@ -27,7 +27,13 @@ public class CalendarItem {
     @JoinColumn(name = "item_type_id", nullable = false)
     private ItemType itemType;
 
+    @Column(nullable = false, length = 45)
     private String itemTitle;
+
+
+    // 현재 애플리케이션 단계에서는 999_999_999_999 이하 제약을 어노테이션으로 걸기 어렵기때문에,
+    // schema.sql로 999_999_999_999 이하의 DB 컬럼 제약을 걸어놓은 상태이다.
+    @Column(nullable = false)
     private Long itemAmount;
 
     private LocalDateTime createdAt;
