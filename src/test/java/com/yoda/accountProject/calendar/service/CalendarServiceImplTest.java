@@ -5,7 +5,6 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendar.dto.CalendarRequestDto;
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.repository.CalendarRepository;
-import com.yoda.accountProject.calendar.service.impl.CalendarServiceImpl;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Slf4j
@@ -33,9 +31,8 @@ class CalendarServiceImplTest {
     void saveCalendar_method_test1() throws Exception {
 
         // given
-
         CalendarRequestDto reqDto = CalendarRequestDto.builder()
-                .date("2025-01-01")
+                .date(LocalDate.of(2025,01,01))
                 .title("테스트 제목")
                 .build();
 

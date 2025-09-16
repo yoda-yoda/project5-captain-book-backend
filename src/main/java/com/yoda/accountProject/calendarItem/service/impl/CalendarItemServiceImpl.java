@@ -16,7 +16,6 @@ import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundExcepti
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +58,7 @@ public class CalendarItemServiceImpl implements CalendarItemService {
         CalendarItem entity = calendarItemRepository.findById(calendarItemId)
                 .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
 
-        CalendarItemResponseDto calendarItemResponseDto = CalendarItemResponseDto.fromEntity(entity);
-
-        return calendarItemResponseDto;
+        return CalendarItemResponseDto.fromEntity(entity);
 
     }
 

@@ -1,101 +1,115 @@
 package com.yoda.accountProject.calendarItem.controller;
 
 import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
-import com.yoda.accountProject.calendarItem.dto.CalendarItemRegisterDto;
-import com.yoda.accountProject.calendarItem.dto.CalendarItemResponseDto;
-import com.yoda.accountProject.calendarItem.dto.CalendarItemTotalAmountDto;
-import com.yoda.accountProject.calendarItem.dto.CalendarItemUpdateDto;
+import com.yoda.accountProject.calendarItem.dto.*;
 import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import com.yoda.accountProject.calendar.service.CalendarService;
+import com.yoda.accountProject.system.common.response.ResponseData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CalendarItemController {
 
     private final CalendarService calendarService;
     private final CalendarItemService calendarItemService;
 
-
     @GetMapping("/calendar/{calendarId}/item")
-    public String itemHome(@PathVariable Long calendarId, Model model){
+    public ResponseEntity<ResponseData<CalendarItemFinalResponseDto>> allCalendarItemRead(@PathVariable Long calendarId){
 
         List<CalendarItemResponseDto> calendarItemResponseDtoList = calendarItemService.getAllCalendarItem(calendarId);
-
         CalendarItemTotalAmountDto totalAmountDto = calendarItemService.getTotalAmount(calendarItemResponseDtoList);
-
         CalendarResponseDto calendarResponseDto = calendarService.getCalendarDtoById(calendarId);
 
-        model.addAttribute("calendarResponseDto", calendarResponseDto);
-        model.addAttribute("calendarItemResponseDtoList", calendarItemResponseDtoList);
-        model.addAttribute("totalAmountDto", totalAmountDto);
 
-        return "calendar-item";
+        CalendarItemFinalResponseDto res = new CalendarItemFinalResponseDto(calendarResponseDto, calendarItemResponseDtoList, totalAmountDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<CalendarItemFinalResponseDto>builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .data(res)
+                                .build()
+                );
+    }
+
+
+    @GetMapping("/calendar/{calendarId}/item/{calendarItemId}")
+    public ResponseEntity<ResponseData<CalendarItemResponseDto>> calendarItemRead(@PathVariable Long calendarItemId){
+
+        CalendarItemResponseDto res = calendarItemService.getCalendarItemDto(calendarItemId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<CalendarItemResponseDto>builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .data(res)
+                                .build()
+                );
     }
 
 
     @PostMapping("/calendar/{calendarId}/item")
-    public String itemCreate(@PathVariable Long calendarId,
-                             @ModelAttribute CalendarItemRegisterDto calendarItemRequestDto
+    public ResponseEntity<ResponseData<CalendarItemResponseDto>> calendarItemCreate(@PathVariable Long calendarId,
+                             @RequestBody @Valid CalendarItemRegisterDto calendarItemRequestDto
                              ){
 
+        // 공식 명세상의 typeId에 따른 item Type을 확인하기 위함이다. 현재 명세상 typeId == 1이 EXPENSE(지출) 이다.
         byte typeId = calendarItemRequestDto.getType().getTypeId();
-        calendarItemService.saveItem(calendarItemRequestDto, calendarId, typeId);
 
+        CalendarItemResponseDto res = calendarItemService.saveItem(calendarItemRequestDto, calendarId, typeId);
 
-        return "redirect:/calendar/" + calendarId + "/item";
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        ResponseData.<CalendarItemResponseDto>builder()
+                                .statusCode(HttpStatus.CREATED.value())
+                                .data(res)
+                                .build()
+                );
     }
 
 
 
-    @GetMapping("/calendar/{calendarId}/item/{calendarItemId}/update")
-    public String calendarItemUpdate(@PathVariable Long calendarItemId, @PathVariable Long calendarId, Model model){
-
-        CalendarItemResponseDto calendarItemDto = calendarItemService.getCalendarItemDto(calendarItemId);
-
-        model.addAttribute("calendarItemDto", calendarItemDto);
-        model.addAttribute("calendarId", calendarId);
-
-
-        return "calendar-item-update";
-    }
-
-
-    @PostMapping("/calendar/{calendarId}/item/{calendarItemId}/update")
-    public String calendarItemUpdate(@PathVariable Long calendarItemId,
-                                     @PathVariable Long calendarId,
-                                     @ModelAttribute CalendarItemUpdateDto calendarItemUpdateDto){
+    @PutMapping("/calendar/{calendarId}/item/{calendarItemId}/update")
+    public ResponseEntity<ResponseData<Void>> calendarItemUpdate(@PathVariable Long calendarItemId,
+                                     @RequestBody @Valid CalendarItemUpdateDto calendarItemUpdateDto){
 
         calendarItemService.updateItem(calendarItemId, calendarItemUpdateDto);
 
-        return "redirect:/calendar/" + calendarId + "/item";
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<Void>builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .build()
+                );
     }
 
 
-    @PostMapping("/calendar/{calendarId}/item/{calendarItemId}/delete")
-    public String calendarItemDelete(@PathVariable Long calendarItemId, @PathVariable Long calendarId){
+    @DeleteMapping("/calendar/{calendarId}/item/{calendarItemId}/delete")
+    public ResponseEntity<ResponseData<Void>> calendarItemDelete(@PathVariable Long calendarItemId){
 
         calendarItemService.deleteCalendarItem(calendarItemId);
 
-        return "redirect:/calendar/" + calendarId + "/item";
-    }
-
-
-    @GetMapping("/calendar/{calendarId}/item/create")
-    public String create(@PathVariable Long calendarId, Model model){
-
-        model.addAttribute("calendarId", calendarId);
-
-        return "calendar-item-create";
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(
+                        ResponseData.<Void>builder()
+                                .statusCode(HttpStatus.NO_CONTENT.value())
+                                .build()
+                );
     }
 
 

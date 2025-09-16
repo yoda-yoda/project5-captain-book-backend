@@ -1,11 +1,15 @@
 package com.yoda.accountProject.calendar.dto;
 
 import com.yoda.accountProject.calendar.domain.Calendar;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
+
+import java.time.LocalDate;
 
 
 @Getter
@@ -13,11 +17,19 @@ import org.springframework.data.annotation.CreatedBy;
 @NoArgsConstructor
 public class CalendarRequestDto {
 
+    @NotNull
+    @Size(max = 35, message = "달력명은 35자 이하여야 합니다.")
     private String title;
-    private String date;
+
+    @NotNull
+    private LocalDate date;
+
+    @AssertTrue(message = "달력 날짜는 9999-12-31 이하여야 합니다.")
+    public boolean isValidDate() {
+        return date == null || !date.isAfter(LocalDate.of(9999, 12, 31));
+    }
 
     public static Calendar toEntity(CalendarRequestDto calendarRequestDto){
-
         return Calendar.builder()
                 .date(calendarRequestDto.getDate())
                 .title(calendarRequestDto.getTitle())
@@ -25,7 +37,7 @@ public class CalendarRequestDto {
     }
 
     @Builder
-    public CalendarRequestDto(String title, String date) {
+    public CalendarRequestDto(String title, LocalDate date) {
         this.title = title;
         this.date = date;
     }
