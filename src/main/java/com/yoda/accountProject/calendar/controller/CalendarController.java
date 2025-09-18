@@ -6,6 +6,7 @@ import com.yoda.accountProject.calendar.dto.CalendarResponseDto;
 import com.yoda.accountProject.calendar.dto.CalendarUpdateDto;
 import com.yoda.accountProject.calendar.service.CalendarService;
 import com.yoda.accountProject.system.common.response.ResponseData;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,11 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping("/home")
-    public ResponseEntity<ResponseData<CalendarFinalResponseDto>> allCalendarRead() {
+    public ResponseEntity<ResponseData<CalendarFinalResponseDto>> allCalendarRead(HttpServletRequest request) {
+
+        String origin = request.getHeader("Origin");
+        System.out.println("Origin =====>" + origin);
+
 
         List<CalendarResponseDto> calendarResponseDtoList = calendarService.getAllCalendar();
         Long calendarTotalSum = calendarService.getTotalCalendarAmountSum(calendarResponseDtoList);
