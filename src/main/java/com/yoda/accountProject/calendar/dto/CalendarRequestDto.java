@@ -1,6 +1,7 @@
 package com.yoda.accountProject.calendar.dto;
 
 import com.yoda.accountProject.calendar.domain.Calendar;
+import com.yoda.accountProject.member.domain.Member;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,12 +30,14 @@ public class CalendarRequestDto {
         return date == null || !date.isAfter(LocalDate.of(9999, 12, 31));
     }
 
-    public static Calendar toEntity(CalendarRequestDto calendarRequestDto){
+    public static Calendar toEntity(CalendarRequestDto calendarRequestDto, Member memberEntity){
         return Calendar.builder()
-                .date(calendarRequestDto.getDate())
                 .title(calendarRequestDto.getTitle())
+                .date(calendarRequestDto.getDate())
+                .member(memberEntity)
                 .build();
     }
+
 
     @Builder
     public CalendarRequestDto(String title, LocalDate date) {

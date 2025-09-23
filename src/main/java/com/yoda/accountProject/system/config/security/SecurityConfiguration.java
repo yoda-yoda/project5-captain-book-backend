@@ -1,45 +1,57 @@
 package com.yoda.accountProject.system.config.security;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final ObjectMapper objectMapper;
-
-    public SecurityConfiguration(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ClientRegistrationRepository repo) throws Exception {
         http
-                .csrf( csrf -> csrf.disable())
+
+            .csrf(csrf -> {
+                // 호환성 문제로 최신 XOR 핸들러를 UUID 토큰 기반 레거시 검증 핸들러로 교체
+                // 핸들러 객체를 생성
+                CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+                requestHandler.setCsrfRequestAttributeName(null);// XOR 검사 비활성화
+
+                csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(requestHandler);
+            })
+
+
+
+
+
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/me").permitAll()
+                        .requestMatchers("/api/auth/me", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
 
 
 
-                // authenticationEntryPoint 를 이용해서 시큐리티의 기본 인증 동작을 커스터마이징한다.
+                // authenticationEntryPoint 를 이용해서 인증 정보가 없을경우 시큐리티의 기본 동작을 커스터마이징한다.
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper)))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
 
 
 
@@ -49,15 +61,31 @@ public class SecurityConfiguration {
                             .defaultSuccessUrl("http://localhost:3000", true)
 
 
-                            // authorizationEndpoint 를 이용해서 다시 로그인시에도 명확성을 위해 구글 계정 등 로그인 페이지가 나오도록 설정한다.
+                            // OAuth 인증 에서 사용자를 리다이렉트하는 시점을 커스터마이징 한다.
+                            // 그 중 authorizationRequestResolver 부분의 파라미터(prompt)를 커스터마이징 하여 재로그인시에도 계정 선택 화면이 나오도록 커스터마이징 한다.
                             // (원래는 재로그인시 계정 선택 화면도 안뜨고 바로 로그인됨)
                             .authorizationEndpoint(authorization ->
                                     authorization.authorizationRequestResolver(
-                                            customAuthorizationRequestResolver(repo)
-
+                                            new CustomAuthorizationRequestResolver(repo)
                                     )
-                            );
-                });
+                            )
+
+                            // OAuth 인증 후 사용자 프로필 정보를 가져오는 부분을 커스터 마이징한다.
+                            .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService));
+
+                })
+
+
+
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                );
+
+
+
 
         return http.build();
     }
@@ -65,38 +93,9 @@ public class SecurityConfiguration {
 
 
 
-    private OAuth2AuthorizationRequestResolver customAuthorizationRequestResolver(
-            ClientRegistrationRepository repo) {
-        DefaultOAuth2AuthorizationRequestResolver defaultResolver =
-                new DefaultOAuth2AuthorizationRequestResolver(repo, "/oauth2/authorization");
 
-        return new OAuth2AuthorizationRequestResolver() {
-            @Override
-            public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
-                OAuth2AuthorizationRequest authRequest = defaultResolver.resolve(request);
-                return customizeAuthRequest(authRequest);
-            }
 
-            @Override
-            public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
-                OAuth2AuthorizationRequest authRequest = defaultResolver.resolve(request, clientRegistrationId);
-                return customizeAuthRequest(authRequest);
-            }
 
-            private OAuth2AuthorizationRequest customizeAuthRequest(OAuth2AuthorizationRequest authRequest) {
-                if (authRequest == null) {
-                    return null;
-                }
-
-                Map<String, Object> extraParams = new HashMap<>(authRequest.getAdditionalParameters());
-                extraParams.put("prompt", "consent"); // 또는 "select_account"
-
-                return OAuth2AuthorizationRequest.from(authRequest)
-                        .additionalParameters(extraParams)
-                        .build();
-            }
-        };
-    }
 
 
 

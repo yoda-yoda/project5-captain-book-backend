@@ -4,25 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Component
+@RequiredArgsConstructor
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
-
-    public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-
 
 
     // 시큐리티 단계에서 인증이 실패했을때 직접 설정하여 보내는 http 응답 메시지

@@ -11,25 +11,31 @@ import com.yoda.accountProject.calendarItem.repository.CalendarItemRepository;
 import com.yoda.accountProject.calendarItem.service.CalendarItemService;
 import com.yoda.accountProject.itemType.domain.ItemType;
 import com.yoda.accountProject.itemType.service.ItemTypeService;
+import com.yoda.accountProject.member.domain.Member;
+import com.yoda.accountProject.member.service.MemberService;
 import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.calendar.CalendarNotFoundException;
 import com.yoda.accountProject.system.exception.calendarItem.CalendarItemNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CalendarItemServiceImpl implements CalendarItemService {
 
     private final CalendarItemRepository calendarItemRepository;
     private final CalendarRepository calendarRepository;
+    private final MemberService memberService;
     private final ItemTypeService itemTypeService;
 
 
+    // 기존 메서드라 처리 안해도됨
     public List<CalendarItemResponseDto> getAllCalendarItem(Long calendarId) {
 
         Calendar calendarEntityById = calendarRepository.findById(calendarId)
@@ -52,6 +58,28 @@ public class CalendarItemServiceImpl implements CalendarItemService {
     }
 
 
+    // 멤버 처리 완료
+    public List<CalendarItemResponseDto> getAllCalendarItemWithMemberId(Long calendarId, Long memberId) {
+
+        Calendar calendarEntityByIdAndMemberId = calendarRepository.findByIdAndMemberId(calendarId, memberId)
+                .orElseThrow( () -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
+
+        List<CalendarItem> calendarItemList = calendarEntityByIdAndMemberId.getCalendarItemList();
+
+        List<CalendarItemResponseDto> calendarItemResponseDtoList = new ArrayList<>();
+
+        if ( !calendarItemList.isEmpty() ) {
+            for (CalendarItem calendarItem : calendarItemList) {
+                calendarItemResponseDtoList.add(CalendarItemResponseDto.fromEntity(calendarItem));
+            }
+        }
+
+        return calendarItemResponseDtoList;
+
+    }
+
+
+    // 기존 메서드라 처리 안해도됨
     public CalendarItemResponseDto getCalendarItemDto(Long calendarItemId) {
 
 
@@ -63,25 +91,56 @@ public class CalendarItemServiceImpl implements CalendarItemService {
     }
 
 
+    // 멤버 처리 완료
+    public CalendarItemResponseDto getCalendarItemDtoWithMemberId(Long calendarItemId, Long memberId) {
 
-    public CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId, byte typeId) {
 
-        Calendar calendarEntity = calendarRepository.findById(calendarId)
+        CalendarItem entity = calendarItemRepository.findByIdAndMemberId(calendarItemId, memberId)
+                .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
+
+        return CalendarItemResponseDto.fromEntity(entity);
+
+    }
+
+
+
+
+    // 멤버 처리 완료
+    public CalendarItemResponseDto getCalendarItemDtoWithMember(Long calendarItemId, Long memberId) {
+
+
+        CalendarItem entity = calendarItemRepository.findByIdAndMemberId(calendarItemId, memberId)
+                .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
+
+        return CalendarItemResponseDto.fromEntity(entity);
+
+    }
+
+
+    // 멤버 처리 완료
+    @Transactional
+    public CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId, Long memberId, byte typeId) {
+
+        Calendar calendarEntity = calendarRepository.findByIdAndMemberId(calendarId, memberId)
                 .orElseThrow(() -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
+
+        Member memberEntity = memberService.getMemberEntityById(memberId);
 
         ItemType itemTypeEntity = itemTypeService.getItemTypeEntityById( (long) typeId );
 
-        CalendarItem entity = CalendarItemRegisterDto.toEntity(calendarItemRequestDto, calendarEntity, itemTypeEntity);
+        CalendarItem entity = CalendarItemRegisterDto.toEntity(calendarItemRequestDto, calendarEntity, memberEntity, itemTypeEntity);
+
         CalendarItem savedEntity = calendarItemRepository.save(entity);
 
         return CalendarItemResponseDto.fromEntity(savedEntity);
     }
 
 
+    // 멤버 처리 완료
     @Transactional
-    public void updateItem(Long calendarItemId ,CalendarItemUpdateDto calendarItemUpdateDto) {
+    public void updateItem(Long calendarItemId ,CalendarItemUpdateDto calendarItemUpdateDto, Long memberId) {
 
-        CalendarItem entity = calendarItemRepository.findById(calendarItemId)
+        CalendarItem entity = calendarItemRepository.findByIdAndMemberId(calendarItemId, memberId)
                 .orElseThrow(() -> new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR));
 
         byte typeId = calendarItemUpdateDto.getType().getTypeId();
@@ -92,12 +151,19 @@ public class CalendarItemServiceImpl implements CalendarItemService {
     }
 
 
-    public void deleteCalendarItem(Long calendarItemId) {
+    // 멤버 처리 완료
+    @Transactional
+    public void deleteCalendarItem(Long calendarItemId, Long memberId) {
 
-        calendarItemRepository.deleteById(calendarItemId);
-
+        // find로 찾고 나서 삭제를 하는 경우, 정상 작동일때 쿼리가 2번 나가므로
+        // 성능을 위해(DB 쿼리 1번을 위해) 삭제 절차는 공통으로 진입하며 만약 삭제 갯수가 0이면 데이터가 존재하지 않는것이므로 오류를 던진다.
+        long deletedCount = calendarItemRepository.deleteByIdAndMemberId(calendarItemId, memberId);
+        if (deletedCount == 0 ) {
+            throw new CalendarItemNotFoundException(ExceptionMessage.CalendarItem.CALENDAR_ITEM_NOT_FOUND_ERROR);
+        }
     }
 
+    // 나온 값에 쓰는거라 멤버처리 안해도됨
     public CalendarItemTotalAmountDto getTotalAmount(List<CalendarItemResponseDto> calendarItemResponseDtoListInCalendar) {
 
         Long totalMinus = 0L;
@@ -131,7 +197,7 @@ public class CalendarItemServiceImpl implements CalendarItemService {
         return calendarItemTotalAmountDto;
     }
 
-
+    // 나온 값에 쓰는거라 멤버처리 안해도됨
     public CalendarItemTotalAmountDto getTotalAmountByItemEntities(List<CalendarItem> calendarItemList) {
 
         Long totalMinus = 0L;

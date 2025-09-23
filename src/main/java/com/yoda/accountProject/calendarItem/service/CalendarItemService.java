@@ -12,13 +12,17 @@ public interface CalendarItemService {
 
     List<CalendarItemResponseDto> getAllCalendarItem(Long calendarId);
 
+    List<CalendarItemResponseDto> getAllCalendarItemWithMemberId(Long calendarId, Long memberId);
+
     CalendarItemResponseDto getCalendarItemDto(Long calendarItemId);
 
-    CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId, byte typeId);
+    CalendarItemResponseDto getCalendarItemDtoWithMemberId(Long calendarItemId, Long memberId);
 
-    void updateItem(Long calendarItemId , CalendarItemUpdateDto calendarItemUpdateDto);
+    CalendarItemResponseDto saveItem(CalendarItemRegisterDto calendarItemRequestDto, Long calendarId, Long memberId, byte typeId);
 
-    void deleteCalendarItem(Long calendarItemId);
+    void updateItem(Long calendarItemId , CalendarItemUpdateDto calendarItemUpdateDto, Long memberId);
+
+    void deleteCalendarItem(Long calendarItemId, Long memberId);
 
     CalendarItemTotalAmountDto getTotalAmount(List<CalendarItemResponseDto> calendarItemResponseDtoListInCalendar);
 

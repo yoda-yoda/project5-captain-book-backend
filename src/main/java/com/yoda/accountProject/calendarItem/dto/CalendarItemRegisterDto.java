@@ -4,6 +4,7 @@ import com.yoda.accountProject.calendar.domain.Calendar;
 import com.yoda.accountProject.calendarItem.domain.CalendarItem;
 import com.yoda.accountProject.calendarItem.domain.Type;
 import com.yoda.accountProject.itemType.domain.ItemType;
+import com.yoda.accountProject.member.domain.Member;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,13 +36,14 @@ public class CalendarItemRegisterDto {
         this.type = type;
     }
 
-    public static CalendarItem toEntity(CalendarItemRegisterDto calendarItemRequestDto, Calendar calendar, ItemType itemType){
+    public static CalendarItem toEntity(CalendarItemRegisterDto calendarItemRequestDto, Calendar calendar, Member memberEntity, ItemType itemType){
 
         return CalendarItem.builder()
-                .calendar(calendar)
-                .itemType(itemType)
                 .itemTitle(calendarItemRequestDto.getItemTitle())
                 .itemAmount(calendarItemRequestDto.getItemAmount())
+                .calendar(calendar)
+                .member(memberEntity)
+                .itemType(itemType)
                 .build();
     }
 
