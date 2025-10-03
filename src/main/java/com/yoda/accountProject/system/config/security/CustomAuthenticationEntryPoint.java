@@ -24,7 +24,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private final ObjectMapper objectMapper;
 
 
-    // 시큐리티 단계에서 인증이 실패했을때 직접 설정하여 보내는 http 응답 메시지
+    // 인증이 “없는 상태”로 보호된 자원에 접근할 때 호출되는 체인이다.
+    // 그 경우 http 응답 메시지를 직접 설정하는 부분이다.
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,

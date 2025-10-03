@@ -1,11 +1,11 @@
 package com.yoda.accountProject.system.config.security;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -19,6 +19,8 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 
     @Bean
@@ -42,7 +44,9 @@ public class SecurityConfiguration {
 
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/me", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/me", "/api/members/exits", "/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/members").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/formLogin").permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -52,6 +56,16 @@ public class SecurityConfiguration {
                 // authenticationEntryPoint 를 이용해서 인증 정보가 없을경우 시큐리티의 기본 동작을 커스터마이징한다.
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(customAuthenticationEntryPoint))
+
+
+
+                .formLogin(form -> form
+                        .loginProcessingUrl("/api/formLogin")   // 로그인 요청 받을 URL
+                        .usernameParameter("userId")
+                        .passwordParameter("password")
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
+                )
 
 
 
@@ -69,6 +83,8 @@ public class SecurityConfiguration {
                                             new CustomAuthorizationRequestResolver(repo)
                                     )
                             )
+
+                            .failureHandler(customAuthenticationFailureHandler)
 
                             // OAuth 인증 후 사용자 프로필 정보를 가져오는 부분을 커스터 마이징한다.
                             .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService));

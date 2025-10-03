@@ -1,6 +1,6 @@
 package com.yoda.accountProject.member.controller;
 
-import com.yoda.accountProject.member.dto.MemberRegisterDto;
+import com.yoda.accountProject.member.dto.MemberFormRegisterDto;
 import com.yoda.accountProject.member.dto.MemberResponseDto;
 import com.yoda.accountProject.member.dto.MemberUpdateDto;
 import com.yoda.accountProject.member.service.MemberService;
@@ -38,6 +38,19 @@ public class MemberController {
     }
 
 
+    @GetMapping("/members/exits")
+    public ResponseEntity<ResponseData<Boolean>> existsMemberRead(@RequestParam("userId") String userId) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        ResponseData.<Boolean>builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .data(memberService.isAlreadyFormMember(userId))
+                                .build()
+                );
+    }
+
     @GetMapping("/members/{memberId}")
     public ResponseEntity<ResponseData<MemberResponseDto>> memberRead(@PathVariable Long memberId) {
 
@@ -57,9 +70,9 @@ public class MemberController {
 
     @PostMapping("/members")
     public ResponseEntity<ResponseData<MemberResponseDto>> memberCreate
-            (@RequestBody @Valid MemberRegisterDto memberRegisterDto){
+            (@RequestBody @Valid MemberFormRegisterDto memberFormRegisterDto){
 
-        MemberResponseDto res = memberService.saveMember(memberRegisterDto);
+        MemberResponseDto res = memberService.saveMember(memberFormRegisterDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

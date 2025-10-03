@@ -1,18 +1,21 @@
 package com.yoda.accountProject.auth.controller;
 
+import com.yoda.accountProject.member.domain.Member;
+import com.yoda.accountProject.member.dto.MemberResponseDto;
 import com.yoda.accountProject.system.common.response.ResponseData;
+import com.yoda.accountProject.system.config.security.CustomOAuth2User;
+import com.yoda.accountProject.system.config.security.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -20,27 +23,56 @@ import java.util.Map;
 public class AuthController {
 
 
+
     @GetMapping("/auth/me")
-    public ResponseEntity<ResponseData<?>> getCurrentUser(@AuthenticationPrincipal OAuth2User principal) {
-        if (principal == null) {
+    public ResponseEntity<ResponseData<?>> getCurrentUser(Authentication authentication) {
+
+        if (authentication == null ||
+                !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken ) {
 
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(
-                            ResponseData.<String>builder()
-                                    .statusCode(HttpStatus.UNAUTHORIZED.value())
-                                    .data("Not authenticated")
-                                    .build());
+                    .body(ResponseData.<String>builder()
+                            .statusCode(HttpStatus.UNAUTHORIZED.value())
+                            .data("인증에 실패하였습니다.")
+                            .build());
         }
+
+
+
+        Object principal = authentication.getPrincipal();
+
+
+        Member memberEntity = null;
+
+        if (principal instanceof CustomUserDetails userDetails) {
+            memberEntity = userDetails.getMemberEntity();
+        } else if (principal instanceof CustomOAuth2User oAuth2User) {
+            memberEntity = oAuth2User.getMemberEntity();
+        }
+
+        if (memberEntity == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseData.<String>builder()
+                            .statusCode(HttpStatus.UNAUTHORIZED.value())
+                            .data("지원하지 않는 인증 타입입니다.")
+                            .build());
+        }
+
+        MemberResponseDto resDto = MemberResponseDto.fromEntity(memberEntity);
+
+
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(
-                        ResponseData.<Map<String, Object>>builder()
-                                .statusCode(HttpStatus.OK.value())
-                                .data(principal.getAttributes())
-                                .build()
-                );
+                .ok(ResponseData.<MemberResponseDto>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .data(resDto)
+                        .build());
     }
+
+
+
 
 
     // csrf 토큰 쿠키 설정용 엔드포인트

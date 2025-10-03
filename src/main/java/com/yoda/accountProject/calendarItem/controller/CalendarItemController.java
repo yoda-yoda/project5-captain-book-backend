@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -29,9 +28,9 @@ public class CalendarItemController {
     // 멤버 처리 완료, 없음처리는 리액트에서 완료
     @GetMapping("/calendar/{calendarId}/item")
     public ResponseEntity<ResponseData<CalendarItemFinalResponseDto>> allCalendarItemRead(
-            @PathVariable Long calendarId, @AuthenticationPrincipal OAuth2User oauth2User){
+            @PathVariable Long calendarId, @AuthenticationPrincipal Object principal){
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         List<CalendarItemResponseDto> calendarItemResponseDtoList = calendarItemService.getAllCalendarItemWithMemberId(calendarId, currentMemberId);
         CalendarItemTotalAmountDto totalAmountDto = calendarItemService.getTotalAmount(calendarItemResponseDtoList);
@@ -56,9 +55,9 @@ public class CalendarItemController {
     public ResponseEntity<ResponseData<CalendarItemResponseDto>> calendarItemRead(
             @PathVariable Long calendarItemId,
             @PathVariable Long calendarId,
-            @AuthenticationPrincipal OAuth2User oauth2User){
+            @AuthenticationPrincipal Object principal){
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         // 먼저 해당 달력이 존재하는지 확인
         calendarService.getCalendarDtoByIdAndMemberId(calendarId, currentMemberId);
@@ -80,11 +79,10 @@ public class CalendarItemController {
     @PostMapping("/calendar/{calendarId}/item")
     public ResponseEntity<ResponseData<CalendarItemResponseDto>> calendarItemCreate(
             @PathVariable Long calendarId,
-            @AuthenticationPrincipal OAuth2User oauth2User,
+            @AuthenticationPrincipal Object principal,
             @RequestBody @Valid CalendarItemRegisterDto calendarItemRequestDto){
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
-
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         // 공식 명세상의 typeId에 따른 item Type을 확인하기 위함이다. 현재 명세상 typeId == 1이 EXPENSE(지출) 이다.
         byte typeId = calendarItemRequestDto.getType().getTypeId();
@@ -107,9 +105,9 @@ public class CalendarItemController {
     @PutMapping("/calendar/item/{calendarItemId}/update")
     public ResponseEntity<ResponseData<Void>> calendarItemUpdate(@PathVariable Long calendarItemId,
                                      @RequestBody @Valid CalendarItemUpdateDto calendarItemUpdateDto,
-                                     @AuthenticationPrincipal OAuth2User oauth2User){
+                                     @AuthenticationPrincipal Object principal){
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         calendarItemService.updateItem(calendarItemId, calendarItemUpdateDto, currentMemberId);
 
@@ -127,9 +125,9 @@ public class CalendarItemController {
     @DeleteMapping("/calendar/item/{calendarItemId}/delete")
     public ResponseEntity<ResponseData<Void>> calendarItemDelete(
             @PathVariable Long calendarItemId,
-            @AuthenticationPrincipal OAuth2User oauth2User){
+            @AuthenticationPrincipal Object principal){
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         calendarItemService.deleteCalendarItem(calendarItemId, currentMemberId);
 

@@ -1,7 +1,7 @@
 package com.yoda.accountProject.member.service;
 
 import com.yoda.accountProject.member.domain.Member;
-import com.yoda.accountProject.member.dto.MemberRegisterDto;
+import com.yoda.accountProject.member.dto.MemberFormRegisterDto;
 import com.yoda.accountProject.member.dto.MemberResponseDto;
 import com.yoda.accountProject.member.dto.MemberUpdateDto;
 import java.util.List;
@@ -9,7 +9,8 @@ import java.util.Map;
 
 public interface MemberService {
 
-    MemberResponseDto saveMember(MemberRegisterDto memberRegisterDto);
+    boolean isAlreadyFormMember(String userId);
+    MemberResponseDto saveMember(MemberFormRegisterDto memberFormRegisterDto);
     Member saveOAuthMemberFromLoadUser(String provider, Map<String, Object> attributes);
     Member saveGoogleMember(String provider, Map<String, Object> attributes);
     Member saveKakaoMember(String provider, Map<String, Object> attributes);

@@ -31,10 +31,10 @@ public class CalendarController {
     // 멤버 처리 완료, 없음처리는 리액트에서 완료
     @GetMapping("/home")
     public ResponseEntity<ResponseData<CalendarFinalResponseDto>> allCalendarRead
-            (HttpServletRequest request, @AuthenticationPrincipal OAuth2User oauth2User) {
+            (HttpServletRequest request, @AuthenticationPrincipal Object principal) {
 
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
 
         List<CalendarResponseDto> calendarResponseDtoList = calendarService.getAllCalendar(currentMemberId);
@@ -56,10 +56,10 @@ public class CalendarController {
     // 멤버 처리 완료, 없음처리 서비스에서 완료
     @GetMapping("/calendar/{calendarId}")
     public ResponseEntity<ResponseData<CalendarResponseDto>> calendarRead(@PathVariable Long calendarId,
-                                                                          @AuthenticationPrincipal OAuth2User oauth2User) {
+                                                                          @AuthenticationPrincipal Object principal) {
 
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
         CalendarResponseDto dto = calendarService.getCalendarDtoByIdAndMemberId(calendarId, currentMemberId);
 
 
@@ -78,10 +78,10 @@ public class CalendarController {
     @PostMapping("/home")
     public ResponseEntity<ResponseData<CalendarResponseDto>> calendarCreate
             (@RequestBody @Valid CalendarRequestDto calendarRequestDto,
-            @AuthenticationPrincipal OAuth2User oauth2User ){
+             @AuthenticationPrincipal Object principal ){
 
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         CalendarResponseDto res = calendarService.saveCalendar(calendarRequestDto, currentMemberId);
 
@@ -102,10 +102,10 @@ public class CalendarController {
     public ResponseEntity<ResponseData<Void>> calendarUpdate(
             @PathVariable Long calendarId,
             @RequestBody @Valid CalendarUpdateDto calendarUpdateDto,
-            @AuthenticationPrincipal OAuth2User oauth2User ){
+            @AuthenticationPrincipal Object principal ){
 
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         calendarService.updateCalendar(calendarId, calendarUpdateDto, currentMemberId);
 
@@ -124,11 +124,10 @@ public class CalendarController {
     @DeleteMapping("/calendar/delete/{calendarResponseDtoId}")
     public ResponseEntity<ResponseData<Void>> calendarDelete(
             @PathVariable Long calendarResponseDtoId,
-            @AuthenticationPrincipal OAuth2User oauth2User){
+            @AuthenticationPrincipal Object principal){
 
 
-        Long currentMemberId = authService.getOAuthCurrentMemberId(oauth2User);
-
+        Long currentMemberId = authService.getCurrentMemberId(principal);
 
         calendarService.deleteCalendar(calendarResponseDtoId, currentMemberId);
 

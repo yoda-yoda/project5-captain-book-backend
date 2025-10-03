@@ -26,6 +26,7 @@ public class ExceptionMessage {
     public static class Member {
 
         public static final String MEMBER_NOT_FOUND_ERROR = "해당 유저가 존재하지 않습니다.";
+        public static final String MEMBER_ALREADY_EXISTS_ERROR = "이미 존재하는 유저입니다.";
 
     }
 

@@ -1,8 +1,7 @@
 package com.yoda.accountProject.member.service.impl;
-
 import com.yoda.accountProject.member.domain.Member;
 import com.yoda.accountProject.member.domain.MemberRole;
-import com.yoda.accountProject.member.dto.MemberRegisterDto;
+import com.yoda.accountProject.member.dto.MemberFormRegisterDto;
 import com.yoda.accountProject.member.dto.MemberResponseDto;
 import com.yoda.accountProject.member.dto.MemberUpdateDto;
 import com.yoda.accountProject.member.repository.MemberRepository;
@@ -11,13 +10,13 @@ import com.yoda.accountProject.system.exception.ExceptionMessage;
 import com.yoda.accountProject.system.exception.auth.GoogleOAuthException;
 import com.yoda.accountProject.system.exception.auth.KakaoOAuthException;
 import com.yoda.accountProject.system.exception.auth.NaverOAuthException;
+import com.yoda.accountProject.system.exception.member.MemberAlreadyExistsException;
 import com.yoda.accountProject.system.exception.member.MemberNotFoundException;
 import com.yoda.accountProject.system.exception.auth.UserObjectTypeMismatchException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -27,11 +26,29 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String formProvider = "local";
+
+    public boolean isAlreadyFormMember(String userId) {
+
+        // provider, userId 조합이 이미 존재하면 true를 반환한다.
+        Optional<Member> entity = memberRepository.findByProviderAndUserId(formProvider, userId);
+        return entity.isPresent();
+
+    }
 
 
-    public MemberResponseDto saveMember(MemberRegisterDto memberRegisterDto) {
 
-        Member entity = MemberRegisterDto.toEntity(memberRegisterDto);
+    public MemberResponseDto saveMember(MemberFormRegisterDto memberFormRegisterDto) {
+
+        String encodedPassword = passwordEncoder.encode(memberFormRegisterDto.getPassword());
+
+        // 현재 구현상 폼 회원 등록은 서비스 계층에서 provider에 "local"을 설정해준다.
+        memberFormRegisterDto.setProvider(formProvider);
+        memberFormRegisterDto.setPassword(encodedPassword);
+        memberFormRegisterDto.setMemberRole(MemberRole.USER);
+
+        Member entity = MemberFormRegisterDto.toEntity(memberFormRegisterDto);
+
         Member savedEntity = memberRepository.save(entity);
 
         return MemberResponseDto.fromEntity(savedEntity);

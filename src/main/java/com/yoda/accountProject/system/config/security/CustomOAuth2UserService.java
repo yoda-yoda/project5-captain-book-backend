@@ -16,8 +16,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberService memberService;
 
-    // loadUser 메서드에서  예외가 발생하면 시큐리티는 모든 예외를 OAuth2AuthenticationException 으로 래핑해서 던진다.
-    // 이후 OAuth2LoginAuthenticationFilter가 AuthenticationFailureHandler를 호출 => 로그인 실패 처리
+    // loadUser 메서드에서 예외가 발생하면 시큐리티는 모든 예외를 OAuth2AuthenticationException 으로 래핑해서 던진다.
+    // 이후 OAuth2LoginAuthenticationFilter가 AuthenticationFailureHandler를 호출하고 로그인 실패를 처리한다.
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
