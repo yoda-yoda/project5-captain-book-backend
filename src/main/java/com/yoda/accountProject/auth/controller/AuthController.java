@@ -74,23 +74,23 @@ public class AuthController {
 
 
 
-
-    // csrf 토큰 쿠키 설정용 엔드포인트
-    @GetMapping("/auth/csrf-token")
-    public ResponseEntity<ResponseData<Void>> getCsrfToken(CsrfToken csrfToken) {
-
-        // 이로 인해 csrf 토큰은 자동으로 set cookie된다. (보안상 응답 body에는 토큰을 담지않는다.)
-        csrfToken.getToken();
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(
-                        ResponseData.<Void>builder()
-                                .statusCode(HttpStatus.OK.value())
-                                .data(null)
-                                .build()
-                );
-    }
+// 251014 - 지금은 안쓰는듯해서 일단 주석처리
+//    // csrf 토큰 쿠키 설정용 엔드포인트
+//    @GetMapping("/auth/csrf-token")
+//    public ResponseEntity<ResponseData<Void>> getCsrfToken(CsrfToken csrfToken) {
+//
+//        // 이로 인해 csrf 토큰은 자동으로 set cookie된다. (보안상 응답 body에는 토큰을 담지않는다.)
+//        csrfToken.getToken();
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(
+//                        ResponseData.<Void>builder()
+//                                .statusCode(HttpStatus.OK.value())
+//                                .data(null)
+//                                .build()
+//                );
+//    }
 
 
 
@@ -133,33 +133,33 @@ public class AuthController {
 
 
 
-    @GetMapping("/check-session")
-    public ResponseEntity<ResponseData<String>> checkSession(HttpSession session) {
-        if (session == null || session.isNew()) {
-
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(
-                            ResponseData.<String>builder()
-                                    .statusCode(HttpStatus.UNAUTHORIZED.value())
-                                    .data("No session or new session")
-                                    .build()
-                    );
-        }
-
-
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(
-                        ResponseData.<String>builder()
-                                .statusCode(HttpStatus.OK.value())
-                                .data("Session exists: " + session.getId())
-                                .build()
-                );
-
-
-    }
+//    @GetMapping("/check-session")
+//    public ResponseEntity<ResponseData<String>> checkSession(HttpSession session) {
+//        if (session == null || session.isNew()) {
+//
+//            return ResponseEntity
+//                    .status(HttpStatus.UNAUTHORIZED)
+//                    .body(
+//                            ResponseData.<String>builder()
+//                                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+//                                    .data("No session or new session")
+//                                    .build()
+//                    );
+//        }
+//
+//
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(
+//                        ResponseData.<String>builder()
+//                                .statusCode(HttpStatus.OK.value())
+//                                .data("Session exists: " + session.getId())
+//                                .build()
+//                );
+//
+//
+//    }
 
 
 

@@ -64,6 +64,7 @@ public class CalendarItemServiceImpl implements CalendarItemService {
         Calendar calendarEntityByIdAndMemberId = calendarRepository.findByIdAndMemberId(calendarId, memberId)
                 .orElseThrow( () -> new CalendarNotFoundException(ExceptionMessage.Calendar.CALENDAR_NOT_FOUND_ERROR));
 
+
         List<CalendarItem> calendarItemList = calendarEntityByIdAndMemberId.getCalendarItemList();
 
         List<CalendarItemResponseDto> calendarItemResponseDtoList = new ArrayList<>();

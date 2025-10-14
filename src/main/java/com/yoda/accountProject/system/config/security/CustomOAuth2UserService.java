@@ -27,6 +27,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // OAuth 사용자 정보를 가져오기
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        // DB에 회원 정보가 있으면 그대로 반환하고, 없으면 저장 후에 반환한다.
         Member memberEntity = memberService.saveOAuthMemberFromLoadUser(provider, oAuth2User.getAttributes());
 
         return new CustomOAuth2User(memberEntity, oAuth2User.getAttributes());

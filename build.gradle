@@ -37,6 +37,11 @@ dependencies {
 	// mockito 초기화 오류를 해결하는 의존성주입
 	testImplementation 'org.mockito:mockito-core:4.9.0'
 
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON 직렬화용
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	runtimeOnly 'com.h2database:h2'

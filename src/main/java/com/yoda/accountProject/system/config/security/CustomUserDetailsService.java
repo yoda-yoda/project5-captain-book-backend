@@ -27,5 +27,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new CustomUserDetails(entity);
     }
+
+
+    public UserDetails loadUserByMemberId(Long memberId) throws UsernameNotFoundException {
+
+        Member entity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저 정보를 찾을 수 없습니다."));
+
+        return new CustomUserDetails(entity);
+    }
+
+
+
 }
 
