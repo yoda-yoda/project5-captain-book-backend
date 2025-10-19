@@ -42,3 +42,6 @@ out/
 ### h2 db ###
 *.mv.db
 accountTestDb.trace.db
+
+### p12 인증서 ###
+*.p12
