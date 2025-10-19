@@ -1,0 +1,13 @@
+package com.captainbook.calendaritem.repository;
+
+import com.captainbook.calendaritem.domain.CalendarItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface CalendarItemRepository extends JpaRepository<CalendarItem, Long> {
+
+    Optional<CalendarItem> findByIdAndMemberId(Long calendarId, Long memberId);
+    long deleteByIdAndMemberId(Long calendarId, Long memberId);
+
+}
