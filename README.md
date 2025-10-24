@@ -8,19 +8,19 @@
 
 ### 리포지터리 링크
 
+* **트러블 슈팅 :** https://github.com/yoda-yoda/project5-captain-book-trouble-shooting
 * **소개 링크 :** https://github.com/yoda-yoda/project5-captain-book-overview
 * **backend (spring) :** https://github.com/yoda-yoda/project5-captain-book-backend
 * **frontend (react) :** https://github.com/yoda-yoda/project5-captain-book-frontend
+
 
 ---
 
 <br>
 
-<br><br>
-
 ### 🔅 이 프로젝트에서 중점을 둔것
 - **(1) 혼자만의 힘** <br>
-이 프로젝트의 시작부터 끝까지 모든 과정을 최대한 혼자만의 힘으로 해결하도록 했습니다. <br>
+이 프로젝트의 시작부터 끝까지 모든 과정을 최대한 혼자만의 힘으로 해결했습니다. <br>
 검색과 Ai를 활용할땐 문제를 최대한 제 스스로 이해하며 해결하려 노력했습니다. <br>
 왜냐하면 그 과정 자체가 저를 훈련시킬거라 생각했기 때문입니다.
 
@@ -36,11 +36,20 @@
 리액트에서는 일부러 axios 라이브러리를 사용하지 않고 훈련을 위해 fetch만을 활용하였습니다. <br>
 왜냐하면 더 까다로운 기술을 먼저 접하거나 다양한 기술을 경험하면 그 이해와 활용의 폭이 넓어질거라 생각했기 때문입니다. <br><br>
 
+<br><br>
+
+### 📝 트러블 슈팅 목록
+
+- https://github.com/yoda-yoda/project5-captain-book-trouble-shooting (현재 약 80개)
+
+<br><br><br>
+
+
 ### 💻 메인페이지 
-: https://.. (아직은 미배포 상태입니다.) <br><br>
+- https://.. (아직은 미배포 상태입니다.) <br><br>
 
 ### 📀 진행상태
-현재 75% 정도 완성된 상태이며 개발, 문서 업데이트를 진행중입니다. <br><br>
+- 현재 75% 정도 완성된 상태이며 개발, 문서 업데이트를 진행중입니다. <br><br>
 
 
 ### ⚙️ 현재 프로젝트 복사시 앱 구동에 필요한 환경 설정들
