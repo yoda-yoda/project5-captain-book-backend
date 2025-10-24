@@ -38,7 +38,7 @@
 
 <br><br>
 
-### 📝 트러블 슈팅 목록
+### 🏅 트러블 슈팅 목록
 
 - https://github.com/yoda-yoda/project5-captain-book-trouble-shooting (현재 약 80개)
 
